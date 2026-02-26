@@ -411,7 +411,7 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
   <div class="hero-content" style="padding-top: 160px; padding-bottom: 20px;">
     <h1 style="font-family:'Trirong',Georgia,serif; font-size:clamp(1.8rem,2.8vw,3.2rem); font-weight:700; line-height:1.12; letter-spacing:-0.02em; color:var(--ink); margin-bottom:32px; max-width:1000px; width:100%;">You've built something worth showing.<br><em>Let's make sure people see it.</em></h1>
     <p class="body-text" style="text-align:center; max-width:580px; margin:0 auto 36px;">We make high engagement online menus that increase revenue for kickass cafes and restaurants.</p>
-    <a href="#packages" class="btn-hero-cta">Let's Jump In →</a>
+    <a href="#how-it-works" class="btn-hero-cta">How It Works →</a>
   </div>
 
   <!-- MARQUEE — anchored to bottom of viewport on first load -->
@@ -513,7 +513,7 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
 
 <!-- CTA MID -->
 <div class="cta-mid">
-  <h2 class="cta-mid-title">Your guests are ready to order. <em>Give them something to say yes to.</em></h2>
+  <h2 class="cta-mid-title">Your guests are ready to order.<br><em>Give them something to say yes to.</em></h2>
   <a href="https://calendly.com/lukeleffel-info/30min" target="_blank" class="btn-cta-white">Book A Call →</a>
 </div>
 
@@ -525,6 +525,48 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
     <div class="roi-cell"><div class="roi-num"><span class="grad-text">1 month.</span></div><div class="roi-desc">See results within weeks of updating your menu.</div></div>
   </div>
 </div>
+
+<!-- HOW IT WORKS -->
+<section style="padding: 80px 60px; border-top: 1px solid var(--border);" id="how-it-works">
+  <div style="text-align:center; max-width:580px; margin:0 auto 48px;">
+    <span class="eyebrow grad-text">How It Works</span>
+    <h2 class="title-xl">Simple process.<br><em>Real results.</em></h2>
+  </div>
+  <div style="display:flex; justify-content:center; gap:8px; margin-bottom:48px;" id="hiw-tabs">
+    <button class="hiw-tab" onclick="switchTab('launch')" id="tab-launch">Launch</button>
+    <button class="hiw-tab hiw-tab-active" onclick="switchTab('keystone')" id="tab-keystone">Keystone</button>
+    <button class="hiw-tab" onclick="switchTab('growth')" id="tab-growth">Growth &amp; Strategy</button>
+  </div>
+  <div id="hiw-launch" class="hiw-panel" style="display:none;">
+    <div class="hiw-steps hiw-steps-3">
+      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Book a Call</div><div class="hiw-step-desc">We discuss your needs and get clear on your vision.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On Site or Ship</div><div class="hiw-step-desc">Send products to our studio or coordinate on-site.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Gallery Delivered</div><div class="hiw-step-desc">Images ready for your site and everywhere else you need them.</div></div>
+    </div>
+  </div>
+  <div id="hiw-keystone" class="hiw-panel">
+    <div class="hiw-steps hiw-steps-3">
+      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Consult</div><div class="hiw-step-desc">We review your menu and platforms and define project scope.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On-Site Visit</div><div class="hiw-step-desc">We come to you, shoot your product and assess your needs firsthand.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Delivery + Set Up</div><div class="hiw-step-desc">We deliver your gallery and get your menu operational.</div></div>
+    </div>
+  </div>
+  <div id="hiw-growth" class="hiw-panel" style="display:none;">
+    <div class="hiw-steps hiw-steps-4">
+      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Consult</div><div class="hiw-step-desc">Deep dive into your menu, systems, and revenue goals.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On-Site Visit</div><div class="hiw-step-desc">Full day of operational review and product capture.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Platform Optimization</div><div class="hiw-step-desc">Full gallery setup across all ordering channels and KDS.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">04</div><div class="hiw-step-title">Ongoing Support</div><div class="hiw-step-desc">We stay available as your operation grows and your menu evolves.</div></div>
+    </div>
+  </div>
+</section>
 
 <!-- PACKAGES -->
 <section style="padding: 48px 60px 100px;" id="packages">
@@ -633,48 +675,6 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
     <div class="for-card">
       <div class="for-card-title">Restaurants and Eateries</div>
       <div class="for-card-desc">Light eateries, bakeries and food brands expanding into online ordering. We understand the full picture from kitchen to guest, and it shows in the work.</div>
-    </div>
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section style="padding: 80px 60px; border-top: 1px solid var(--border);" id="how-it-works">
-  <div style="text-align:center; max-width:580px; margin:0 auto 48px;">
-    <span class="eyebrow grad-text">How It Works</span>
-    <h2 class="title-xl">Simple process. <em>Real results.</em></h2>
-  </div>
-  <div style="display:flex; justify-content:center; gap:8px; margin-bottom:48px;" id="hiw-tabs">
-    <button class="hiw-tab" onclick="switchTab('launch')" id="tab-launch">Launch</button>
-    <button class="hiw-tab hiw-tab-active" onclick="switchTab('keystone')" id="tab-keystone">Keystone</button>
-    <button class="hiw-tab" onclick="switchTab('growth')" id="tab-growth">Growth &amp; Strategy</button>
-  </div>
-  <div id="hiw-launch" class="hiw-panel" style="display:none;">
-    <div class="hiw-steps hiw-steps-3">
-      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Book a Call</div><div class="hiw-step-desc">We discuss your needs and get clear on your vision.</div></div>
-      <div class="hiw-connector"></div>
-      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On Site or Ship</div><div class="hiw-step-desc">Send products to our studio or coordinate on-site.</div></div>
-      <div class="hiw-connector"></div>
-      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Gallery Delivered</div><div class="hiw-step-desc">Images ready for your site and everywhere else you need them.</div></div>
-    </div>
-  </div>
-  <div id="hiw-keystone" class="hiw-panel">
-    <div class="hiw-steps hiw-steps-3">
-      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Consult</div><div class="hiw-step-desc">We review your menu and platforms and define project scope.</div></div>
-      <div class="hiw-connector"></div>
-      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On-Site Visit</div><div class="hiw-step-desc">We come to you, shoot your product and assess your needs firsthand.</div></div>
-      <div class="hiw-connector"></div>
-      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Delivery + Set Up</div><div class="hiw-step-desc">We deliver your gallery and get your menu operational.</div></div>
-    </div>
-  </div>
-  <div id="hiw-growth" class="hiw-panel" style="display:none;">
-    <div class="hiw-steps hiw-steps-4">
-      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Consult</div><div class="hiw-step-desc">Deep dive into your menu, systems, and revenue goals.</div></div>
-      <div class="hiw-connector"></div>
-      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On-Site Visit</div><div class="hiw-step-desc">Full day of operational review and product capture.</div></div>
-      <div class="hiw-connector"></div>
-      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Platform Optimization</div><div class="hiw-step-desc">Full gallery setup across all ordering channels and KDS.</div></div>
-      <div class="hiw-connector"></div>
-      <div class="hiw-step"><div class="hiw-num grad-text">04</div><div class="hiw-step-title">Ongoing Support</div><div class="hiw-step-desc">We stay available as your operation grows and your menu evolves.</div></div>
     </div>
   </div>
 </section>
@@ -809,7 +809,7 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
 <!-- FINAL CTA -->
 <section class="cta-section">
   <span class="eyebrow grad-text">Ready to Start</span>
-  <h2 class="title-xl" style="margin-top: 16px;">Your menu should be <em>working as hard as you do.</em></h2>
+  <h2 class="title-xl" style="margin-top: 16px;">Your menu should work as hard as you do.</h2>
   <a href="https://calendly.com/lukeleffel-info/30min" target="_blank" class="btn-cta" style="font-size:0.82rem; padding:16px 40px; letter-spacing:0.15em;">Let's Get Started →</a>
 </section>
 
