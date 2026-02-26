@@ -12,13 +12,13 @@
   <link rel="canonical" href="https://soloonwhite.com">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://soloonwhite.com">
-  <meta property="og:title" content="Solo on White | Beautiful Cafe Menus">
+  <meta property="og:title" content="Solo on White — Menu Photography That Increases Restaurant Sales">
   <meta property="og:description" content="Professional food photography and menu consulting built by operators, for operators. Cafes and restaurants see 20–40% lift in online order values with our work.">
   <meta property="og:image" content="https://soloonwhite.com/og-image.jpg">
   <meta property="og:site_name" content="Solo on White">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:url" content="https://soloonwhite.com">
-  <meta name="twitter:title" content="Solo on White | Beautiful Cafe Menus">
+  <meta name="twitter:title" content="Solo on White — Menu Photography That Increases Restaurant Sales">
   <meta name="twitter:description" content="Professional food photography and menu consulting. Cafes and restaurants see 20–40% lift in online order values.">
   <meta name="twitter:image" content="https://soloonwhite.com/og-image.jpg">
   <meta name="twitter:creator" content="@lukeleffel">
@@ -307,6 +307,28 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba
 .calc-mini-value { font-weight: 800; }
 .calc-hook { margin-top: 6px; color: var(--ink-soft); font-size: 1rem; line-height: 1.5; }
 
+/* HOW IT WORKS */
+.hiw-tab { font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 24px; border-radius: 4px; border: 1px solid var(--border-strong); background: transparent; color: var(--ink-soft); cursor: pointer; transition: all 0.2s; }
+.hiw-tab:hover { border-color: var(--ink); color: var(--ink); }
+.hiw-tab-active { background: var(--ink); color: #fff !important; border-color: var(--ink); }
+.hiw-steps { display: grid; align-items: start; max-width: 900px; margin: 0 auto; gap: 0; }
+.hiw-steps-3 { grid-template-columns: 1fr 40px 1fr 40px 1fr; }
+.hiw-steps-4 { grid-template-columns: 1fr 32px 1fr 32px 1fr 32px 1fr; }
+.hiw-step { text-align: center; padding: 0 16px; }
+.hiw-num { font-family: 'Trirong', Georgia, serif; font-size: 2.4rem; font-weight: 700; line-height: 1; margin-bottom: 14px; }
+.hiw-step-title { font-size: 0.95rem; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+.hiw-step-desc { font-size: 0.84rem; color: var(--ink-soft); line-height: 1.65; }
+.hiw-connector { display: flex; align-items: center; justify-content: center; padding-top: 14px; }
+.hiw-connector::after { content: ''; display: block; width: 100%; height: 1px; background: var(--border-strong); }
+
+/* PRIVACY POLICY MODAL */
+.privacy-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 1002; align-items: center; justify-content: center; padding: 24px; }
+.privacy-modal-box { background: var(--white); border-radius: 14px; padding: 48px 40px 40px; max-width: 640px; width: 100%; max-height: 80vh; overflow-y: auto; position: relative; box-shadow: 0 24px 60px rgba(0,0,0,0.18); }
+.privacy-modal-close { position: absolute; top: 18px; right: 22px; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--ink-muted); }
+.privacy-modal-close:hover { color: var(--ink); }
+.privacy-h3 { font-size: 0.88rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink); margin: 22px 0 6px; }
+.privacy-p { font-size: 0.88rem; color: var(--ink-soft); line-height: 1.75; margin-bottom: 10px; }
+
 /* FINAL CTA */
 .cta-section { padding: 130px 60px; border-top: 1px solid var(--border); text-align: center; }
 
@@ -347,6 +369,12 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
   .calc-kpi-value { font-size: 1.75rem; }
   .guide-modal-box { padding: 40px 24px 32px; }
   .modal-box { padding: 36px 24px; }
+  .hiw-steps-3, .hiw-steps-4 { grid-template-columns: 1fr; }
+  .hiw-connector { display: none; }
+  .hiw-step { padding: 20px 0; border-bottom: 1px solid var(--border); text-align: left; }
+  .hiw-step:last-child { border-bottom: none; }
+  .hiw-num { font-size: 1.8rem; }
+  #hiw-tabs { flex-wrap: wrap; }
 }
 </style>
 </head>
@@ -382,7 +410,6 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
 <div class="hero-viewport">
   <div class="hero-content" style="padding-top: 160px; padding-bottom: 20px;">
     <h1 style="font-family:'Trirong',Georgia,serif; font-size:clamp(1.8rem,2.8vw,3.2rem); font-weight:700; line-height:1.12; letter-spacing:-0.02em; color:var(--ink); margin-bottom:32px; max-width:1000px; width:100%;">You've built something worth showing.<br><em>Let's make sure people see it.</em></h1>
-    <span class="eyebrow grad-text" style="margin-bottom:20px; display:block; letter-spacing:0.22em;">Solo on White</span>
     <p class="body-text" style="text-align:center; max-width:580px; margin:0 auto 36px;">We make high engagement online menus that increase revenue for kickass cafes and restaurants.</p>
     <a href="#packages" class="btn-hero-cta">Let's Jump In →</a>
   </div>
@@ -610,9 +637,52 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
   </div>
 </section>
 
+<!-- HOW IT WORKS -->
+<section style="padding: 80px 60px; border-top: 1px solid var(--border);" id="how-it-works">
+  <div style="text-align:center; max-width:580px; margin:0 auto 48px;">
+    <span class="eyebrow grad-text">How It Works</span>
+    <h2 class="title-xl">Simple process. <em>Real results.</em></h2>
+  </div>
+  <div style="display:flex; justify-content:center; gap:8px; margin-bottom:48px;" id="hiw-tabs">
+    <button class="hiw-tab" onclick="switchTab('launch')" id="tab-launch">Launch</button>
+    <button class="hiw-tab hiw-tab-active" onclick="switchTab('keystone')" id="tab-keystone">Keystone</button>
+    <button class="hiw-tab" onclick="switchTab('growth')" id="tab-growth">Growth &amp; Strategy</button>
+  </div>
+  <div id="hiw-launch" class="hiw-panel" style="display:none;">
+    <div class="hiw-steps hiw-steps-3">
+      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Book a Call</div><div class="hiw-step-desc">We discuss your needs and get clear on your vision.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On Site or Ship</div><div class="hiw-step-desc">Send products to our studio or coordinate on-site.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Gallery Delivered</div><div class="hiw-step-desc">Images ready for your site and everywhere else you need them.</div></div>
+    </div>
+  </div>
+  <div id="hiw-keystone" class="hiw-panel">
+    <div class="hiw-steps hiw-steps-3">
+      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Consult</div><div class="hiw-step-desc">We review your menu and platforms and define project scope.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On-Site Visit</div><div class="hiw-step-desc">We come to you, shoot your product and assess your needs firsthand.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Delivery + Set Up</div><div class="hiw-step-desc">We deliver your gallery and get your menu operational.</div></div>
+    </div>
+  </div>
+  <div id="hiw-growth" class="hiw-panel" style="display:none;">
+    <div class="hiw-steps hiw-steps-4">
+      <div class="hiw-step"><div class="hiw-num grad-text">01</div><div class="hiw-step-title">Consult</div><div class="hiw-step-desc">Deep dive into your menu, systems, and revenue goals.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">02</div><div class="hiw-step-title">On-Site Visit</div><div class="hiw-step-desc">Full day of operational review and product capture.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">03</div><div class="hiw-step-title">Platform Optimization</div><div class="hiw-step-desc">Full gallery setup across all ordering channels and KDS.</div></div>
+      <div class="hiw-connector"></div>
+      <div class="hiw-step"><div class="hiw-num grad-text">04</div><div class="hiw-step-title">Ongoing Support</div><div class="hiw-step-desc">We stay available as your operation grows and your menu evolves.</div></div>
+    </div>
+  </div>
+</section>
+
 <!-- NOT A FIT -->
 <section class="not-a-fit" id="not-a-fit">
   <div style="max-width: 680px; margin: 0 auto;">
+    <span class="eyebrow grad-text">FYI</span>
     <h2 class="title-xl">Our services aren't for everyone.</h2>
     <p class="body-text" style="text-align:center; margin-top: 14px;">We're best suited for cafes and brands looking to quickly grow revenue through increased online ordering. That might not be you, and that's ok.</p>
   </div>
@@ -751,9 +821,42 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
     <li><a href="#faq">FAQ</a></li>
     <li><a href="https://www.lukeleffel.com/" target="_blank">Luke Leffel</a></li>
     <li><a href="mailto:info@lukeleffel.com">Contact</a></li>
+    <li><a href="#" onclick="document.getElementById('privacy-modal').style.display='flex'; return false;">Privacy Policy</a></li>
   </ul>
   <div class="footer-copy">© 2026 Solo on White · Luke Leffel</div>
 </footer>
+
+<!-- PRIVACY POLICY MODAL -->
+<div id="privacy-modal" class="privacy-modal-overlay" onclick="if(event.target===this)this.style.display='none'">
+  <div class="privacy-modal-box">
+    <button class="privacy-modal-close" onclick="document.getElementById('privacy-modal').style.display='none'">✕</button>
+    <h2 style="font-family:'Trirong',Georgia,serif; font-size:1.6rem; font-weight:700; margin-bottom:6px;">Privacy Policy</h2>
+    <p class="privacy-p" style="color:var(--ink-muted); font-size:0.8rem;">Last updated: February 2026</p>
+
+    <p class="privacy-p">Solo on White ("we," "us," or "our") operates soloonwhite.com. This policy explains how we collect, use, and protect your information when you visit our site or inquire about our services.</p>
+
+    <div class="privacy-h3">Information We Collect</div>
+    <p class="privacy-p">We collect information you provide directly, such as your name, email address, and business details when you book a call, submit an inquiry, or contact us. We may also collect basic usage data through analytics tools to understand how visitors interact with the site.</p>
+
+    <div class="privacy-h3">How We Use Your Information</div>
+    <p class="privacy-p">We use your information solely to respond to inquiries, provide services you've requested, and send relevant updates about Solo on White. We do not sell, rent, or share your personal information with third parties for marketing purposes.</p>
+
+    <div class="privacy-h3">Cookies</div>
+    <p class="privacy-p">Our site may use basic cookies to support functionality and analytics. You can disable cookies in your browser settings at any time. We do not use tracking cookies for advertising.</p>
+
+    <div class="privacy-h3">Third-Party Services</div>
+    <p class="privacy-p">We use Calendly to facilitate call bookings. When you use Calendly, their privacy policy applies. We may also use analytics tools such as Google Analytics to understand site traffic in aggregate.</p>
+
+    <div class="privacy-h3">Data Retention</div>
+    <p class="privacy-p">We retain your information only as long as necessary to fulfill the purposes outlined here or as required by law. You may request deletion of your data at any time by contacting us.</p>
+
+    <div class="privacy-h3">Your Rights</div>
+    <p class="privacy-p">You have the right to access, correct, or request deletion of any personal information we hold about you. To exercise these rights, email us at <a href="mailto:info@lukeleffel.com" style="color:var(--blue);">info@lukeleffel.com</a>.</p>
+
+    <div class="privacy-h3">Contact</div>
+    <p class="privacy-p">Questions about this policy? Reach us at <a href="mailto:info@lukeleffel.com" style="color:var(--blue);">info@lukeleffel.com</a>.</p>
+  </div>
+</div>
 
 <!-- ROI CALCULATOR MODAL -->
 <div id="calc-modal" class="modal-overlay" onclick="if(event.target===this)closeCalcModal()">
@@ -791,6 +894,15 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
 </div>
 
 <script>
+  function switchTab(tab) {
+    ['launch','keystone','growth'].forEach(function(t) {
+      document.getElementById('hiw-' + t).style.display = 'none';
+      document.getElementById('tab-' + t).classList.remove('hiw-tab-active');
+    });
+    document.getElementById('hiw-' + tab).style.display = 'block';
+    document.getElementById('tab-' + tab).classList.add('hiw-tab-active');
+  }
+
   function openCalcModal() {
     document.getElementById('calc-modal').style.display = 'flex';
   }
