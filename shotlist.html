@@ -497,7 +497,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
   .total-labels { justify-content: flex-start; }
   .cover-title { font-size: 28px; }
 
-  .info-block { grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 16px; }
+  .info-block { grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 16px; font-size: 15px; }
   .info-block .info-field:last-child { grid-column: 1 / -1; }
 
   .shot-table thead { display: none; }
@@ -509,11 +509,11 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
     padding: 10px 0;
     border-bottom: 1px solid var(--rule);
   }
-  .shot-table tbody tr td { border-bottom: none; padding: 0; font-size: 13px; }
+  .shot-table tbody tr td { border-bottom: none; padding: 0; font-size: 15px; }
   .shot-table td:first-child { grid-row: 1 / 3; }
   .shot-table td:nth-child(2) { grid-column: 2; grid-row: 1; font-weight: 500; }
   .shot-table td:nth-child(3) { grid-column: 2; grid-row: 2; }
-  .shot-table td:nth-child(3) .note-input { font-size: 11px; }
+  .shot-table td:nth-child(3) .note-input { font-size: 13px; }
   .shot-table td.status-cell { grid-column: 3; grid-row: 1; }
   .shot-table td.remove-cell { grid-column: 3; grid-row: 2; text-align: center; }
 
@@ -575,7 +575,53 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
     print-color-adjust: exact;
   }
 }
+/* ── SHARE MODAL ────────────────────────────────────────────────── */
+.share-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5); z-index: 200;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.share-modal-overlay.open { display: flex; }
+.share-modal-box {
+  background: #fff; border-radius: 10px;
+  padding: 36px 32px 28px; max-width: 400px; width: 100%;
+  position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+  text-align: center;
+}
+.share-modal-close {
+  position: absolute; top: 14px; right: 18px;
+  background: none; border: none; font-size: 1.2rem;
+  cursor: pointer; color: var(--ink-low);
+}
+.share-modal-close:hover { color: var(--ink); }
+.share-modal-title {
+  font-family: var(--serif); font-size: 20px; font-weight: 400;
+  font-style: italic; margin-bottom: 6px; color: var(--ink);
+}
+.share-modal-sub {
+  font-size: 12px; color: var(--ink-low); margin-bottom: 24px; line-height: 1.5;
+}
+#qr-container { margin: 0 auto 20px; width: 180px; height: 180px; }
+#qr-container canvas, #qr-container img { border-radius: 6px; }
+.share-copy-row {
+  display: flex; gap: 8px; margin-bottom: 14px;
+}
+.share-url-display {
+  flex: 1; border: 1px solid var(--rule); border-radius: 6px;
+  padding: 8px 12px; font-size: 11px; color: var(--ink-low);
+  background: var(--fill); white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; font-family: var(--sans);
+}
+.btn-copy {
+  border: none; background: var(--grad); color: white;
+  font-family: var(--sans); font-size: 12px; font-weight: 500;
+  padding: 8px 16px; border-radius: 6px; cursor: pointer;
+  white-space: nowrap; transition: opacity .15s;
+}
+.btn-copy:hover { opacity: .85; }
+.share-note { font-size: 11px; color: var(--ink-low); line-height: 1.5; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
@@ -586,6 +632,8 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
     <span class="progress-label"><strong id="doneCount">0</strong> / <span id="totalCount">0</span> completed</span>
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     <button class="btn-print" onclick="window.print()">Save as PDF ↗</button>
+    <button class="btn-print" onclick="resetState()" style="border-color:#f0c0cc; color:#c05070;" title="Clear all and reset">Reset ↺</button>
+    <button class="btn-print" onclick="openShareModal()" style="border-color:#b0c8f0; color:#3060a0;" title="Share / QR code">Share ↗</button>
   </div>
 
   <!-- COVER -->
@@ -652,6 +700,21 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
   </div>
 
 </div><!-- /page-wrap -->
+
+<!-- SHARE MODAL -->
+<div class="share-modal-overlay" id="shareModal" onclick="if(event.target===this)closeShareModal()">
+  <div class="share-modal-box">
+    <button class="share-modal-close" onclick="closeShareModal()">✕</button>
+    <div class="share-modal-title">Share this shot list</div>
+    <p class="share-modal-sub">Scan the QR code or copy the link.<br>Anyone who opens it will see the current state.</p>
+    <div id="qr-container"></div>
+    <div class="share-copy-row">
+      <div class="share-url-display" id="shareUrlDisplay">generating...</div>
+      <button class="btn-copy" id="copyBtn" onclick="copyShareUrl()">Copy</button>
+    </div>
+    <p class="share-note">The link encodes your current checklist state — checkboxes, notes, and custom items. Recipients get a snapshot; changes on their device do not sync back.</p>
+  </div>
+</div>
 
 <script>
 // ── DATA ─────────────────────────────────────────────────────────────
@@ -842,7 +905,218 @@ SECTIONS.forEach(function(sec, si) {
   tbody.appendChild(addTr);
 });
 
+
+// ── PERSIST STATE ─────────────────────────────────────────────────────
+var SAVE_KEY = 'sow_shotlist_v1';
+
+function saveState() {
+  var state = { fields: {}, rows: {}, checks: {}, statuses: {}, notes: {}, customItems: [] };
+
+  // Info fields
+  document.querySelectorAll('.info-input').forEach(function(el, i) {
+    state.fields[i] = el.value;
+  });
+
+  // Checkboxes, statuses, notes
+  document.querySelectorAll('.shot-table tbody tr:not(.add-row)').forEach(function(tr) {
+    var cb = tr.querySelector('input[type="checkbox"]');
+    var sel = tr.querySelector('.status-select');
+    var note = tr.querySelector('.note-input');
+    var name = tr.querySelector('.item-name');
+    if (!cb || !name) return;
+    var key = name.textContent.trim();
+    state.checks[key]   = cb.checked;
+    state.statuses[key] = sel ? sel.value : '';
+    state.notes[key]    = note ? note.value : '';
+  });
+
+  // Custom added items (rows not in original SECTIONS)
+  var originalNames = [];
+  SECTIONS.forEach(function(s){ s.items.forEach(function(i){ originalNames.push(i.name); }); });
+
+  document.querySelectorAll('.shot-table tbody tr:not(.add-row)').forEach(function(tr, idx) {
+    var name = tr.querySelector('.item-name');
+    var note = tr.querySelector('.note-input');
+    if (!name) return;
+    var n = name.textContent.trim();
+    if (originalNames.indexOf(n) === -1) {
+      // find which section
+      var tbody = tr.closest('tbody');
+      var si = tbody ? tbody.id.replace('tbody-','') : '0';
+      state.customItems.push({ name: n, note: note ? note.value : '', si: si });
+    }
+  });
+
+  try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+function restoreState() {
+  var raw;
+  try { raw = localStorage.getItem(SAVE_KEY); } catch(e) {}
+  if (!raw) return;
+  var state;
+  try { state = JSON.parse(raw); } catch(e) { return; }
+
+  // Restore info fields
+  if (state.fields) {
+    document.querySelectorAll('.info-input').forEach(function(el, i) {
+      if (state.fields[i] !== undefined) el.value = state.fields[i];
+    });
+  }
+
+  // Restore custom items first (so their checks/notes can be restored too)
+  if (state.customItems && state.customItems.length) {
+    state.customItems.forEach(function(ci) {
+      var si = parseInt(ci.si, 10);
+      customCount[si] = (customCount[si] || 0) + 1;
+      var ii = 'custom-' + customCount[si];
+      var tbody = document.getElementById('tbody-' + si);
+      if (!tbody) return;
+      var addRow = tbody.querySelector('.add-row');
+      tbody.insertBefore(makeRow(ci.name, ci.note, si, ii), addRow);
+    });
+  }
+
+  // Restore checks, statuses, notes
+  document.querySelectorAll('.shot-table tbody tr:not(.add-row)').forEach(function(tr) {
+    var cb   = tr.querySelector('input[type="checkbox"]');
+    var sel  = tr.querySelector('.status-select');
+    var note = tr.querySelector('.note-input');
+    var nameEl = tr.querySelector('.item-name');
+    if (!cb || !nameEl) return;
+    var key = nameEl.textContent.trim();
+    if (state.checks && state.checks[key]) {
+      cb.checked = true;
+      tr.classList.add('checked-row');
+    }
+    if (state.statuses && state.statuses[key] && sel) {
+      sel.value = state.statuses[key];
+      sel.className = 'status-select' + (sel.value === 'done' ? ' done' : sel.value === 'skip' ? ' skip' : '');
+    }
+    if (state.notes && state.notes[key] !== undefined && note) {
+      note.value = state.notes[key];
+    }
+  });
+
+  updateProgress();
+}
+
+function resetState() {
+  if (!confirm('Reset the entire shot list? This will clear all checkboxes, notes, and custom items.')) return;
+  try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
+  location.reload();
+}
+
+// Hook all inputs to save on change
+document.addEventListener('change', saveState);
+document.addEventListener('input',  saveState);
+
+// Restore on load
+restoreState();
 requestAnimationFrame(updateProgress);
+
+// ── SHARE / QR ────────────────────────────────────────────────────────
+function buildShareUrl() {
+  var state = { fields: {}, checks: {}, statuses: {}, notes: {}, customItems: [] };
+
+  document.querySelectorAll('.info-input').forEach(function(el, i) {
+    state.fields[i] = el.value;
+  });
+
+  var originalNames = [];
+  SECTIONS.forEach(function(s) { s.items.forEach(function(i) { originalNames.push(i.name); }); });
+
+  document.querySelectorAll('.shot-table tbody tr:not(.add-row)').forEach(function(tr) {
+    var cb     = tr.querySelector('input[type="checkbox"]');
+    var sel    = tr.querySelector('.status-select');
+    var note   = tr.querySelector('.note-input');
+    var nameEl = tr.querySelector('.item-name');
+    if (!cb || !nameEl) return;
+    var key = nameEl.textContent.trim();
+    state.checks[key]   = cb.checked;
+    state.statuses[key] = sel  ? sel.value  : '';
+    state.notes[key]    = note ? note.value : '';
+    if (originalNames.indexOf(key) === -1) {
+      var tbody = tr.closest('tbody');
+      var si = tbody ? tbody.id.replace('tbody-', '') : '0';
+      state.customItems.push({ name: key, note: note ? note.value : '', si: si });
+    }
+  });
+
+  var encoded = btoa(encodeURIComponent(JSON.stringify(state)));
+  return location.href.split('?')[0].split('#')[0] + '?state=' + encoded;
+}
+
+function openShareModal() {
+  var url = buildShareUrl();
+  document.getElementById('shareUrlDisplay').textContent = url;
+  var container = document.getElementById('qr-container');
+  container.innerHTML = '';
+  try {
+    new QRCode(container, {
+      text: url, width: 180, height: 180,
+      colorDark: '#0f0f0f', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  } catch(e) { container.textContent = 'QR unavailable — copy link above'; }
+  document.getElementById('shareModal').classList.add('open');
+}
+
+function closeShareModal() {
+  document.getElementById('shareModal').classList.remove('open');
+}
+
+function copyShareUrl() {
+  var url = document.getElementById('shareUrlDisplay').textContent;
+  var btn = document.getElementById('copyBtn');
+  navigator.clipboard.writeText(url).then(function() {
+    btn.textContent = 'Copied!';
+    setTimeout(function() { btn.textContent = 'Copy'; }, 2000);
+  }).catch(function() {
+    prompt('Copy this link:', url);
+  });
+}
+
+// Restore from URL ?state= param if present
+(function() {
+  var params = new URLSearchParams(location.search);
+  var encoded = params.get('state');
+  if (!encoded) return;
+  try {
+    var state = JSON.parse(decodeURIComponent(atob(encoded)));
+    if (state.customItems && state.customItems.length) {
+      state.customItems.forEach(function(ci) {
+        var si = parseInt(ci.si, 10);
+        customCount[si] = (customCount[si] || 0) + 1;
+        var ii = 'custom-' + customCount[si];
+        var tbody = document.getElementById('tbody-' + si);
+        if (!tbody) return;
+        var addRow = tbody.querySelector('.add-row');
+        tbody.insertBefore(makeRow(ci.name, ci.note, si, ii), addRow);
+      });
+    }
+    if (state.fields) {
+      document.querySelectorAll('.info-input').forEach(function(el, i) {
+        if (state.fields[i] !== undefined) el.value = state.fields[i];
+      });
+    }
+    document.querySelectorAll('.shot-table tbody tr:not(.add-row)').forEach(function(tr) {
+      var cb     = tr.querySelector('input[type="checkbox"]');
+      var sel    = tr.querySelector('.status-select');
+      var note   = tr.querySelector('.note-input');
+      var nameEl = tr.querySelector('.item-name');
+      if (!cb || !nameEl) return;
+      var key = nameEl.textContent.trim();
+      if (state.checks && state.checks[key])   { cb.checked = true; tr.classList.add('checked-row'); }
+      if (state.statuses && state.statuses[key] && sel) {
+        sel.value = state.statuses[key];
+        sel.className = 'status-select' + (sel.value === 'done' ? ' done' : sel.value === 'skip' ? ' skip' : '');
+      }
+      if (state.notes && state.notes[key] !== undefined && note) { note.value = state.notes[key]; }
+    });
+    updateProgress();
+  } catch(e) {}
+})();
 </script>
 </body>
 </html>
