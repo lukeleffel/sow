@@ -416,6 +416,22 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
   letter-spacing: 0.3px;
 }
 .progress-label strong { color: var(--ink); }
+.session-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.session-label.shared {
+  background: linear-gradient(90deg, #5b8dee, #e8619a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 .progress-track {
   flex: 1;
   height: 3px;
@@ -629,10 +645,11 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
 
   <!-- STICKY PROGRESS -->
   <div class="progress-section" id="progressBar">
+    <span class="session-label" id="sessionLabel"></span>
     <span class="progress-label"><strong id="doneCount">0</strong> / <span id="totalCount">0</span> completed</span>
     <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     <button class="btn-print" onclick="window.print()">Save as PDF ↗</button>
-    <button class="btn-print" onclick="resetState()" style="border-color:#f0c0cc; color:#c05070;" title="Clear all and reset">Reset ↺</button>
+    <button class="btn-print" id="resetBtn" onclick="resetState()" style="border-color:#f0c0cc; color:#c05070;" title="Clear all and reset">Reset ↺</button>
     <button class="btn-print" onclick="openShareModal()" style="border-color:#b0c8f0; color:#3060a0;" title="Share / QR code">Share ↗</button>
   </div>
 
@@ -846,6 +863,24 @@ function updateProgress() {
   document.getElementById('progressFill').style.width = total ? (done / total * 100) + '%' : '0%';
   document.getElementById('coverDone').textContent   = done;
   document.getElementById('coverTarget').textContent = total;
+  updateSessionLabel();
+}
+
+function updateSessionLabel() {
+  var clientEl = document.querySelector('.info-input');
+  var name = clientEl ? clientEl.value.trim() : '';
+  var label = document.getElementById('sessionLabel');
+  if (!label) return;
+  var isShared = new URLSearchParams(location.search).get('v');
+  if (isShared) {
+    label.textContent = (name || 'Shared Session') + ' · Shared View';
+    label.className = 'session-label shared';
+    var resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) resetBtn.style.display = 'none';
+  } else {
+    label.textContent = name || 'Untitled Session';
+    label.className = 'session-label';
+  }
 }
 
 var customCount = {};
@@ -1010,6 +1045,10 @@ function resetState() {
 // Hook all inputs to save on change
 document.addEventListener('change', saveState);
 document.addEventListener('input',  saveState);
+
+// Update session label when client name changes
+var clientInput = document.querySelector('.info-input');
+if (clientInput) clientInput.addEventListener('input', updateSessionLabel);
 
 // Restore on load
 restoreState();
