@@ -200,44 +200,6 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
 .info-input[type="time"]:focus { color: var(--ink); }
 
 /* ── INSTRUCTIONS ───────────────────────────────────────────────── */
-.instructions {
-  display: flex;
-  gap: 32px;
-  margin-bottom: 48px;
-  padding: 0 4px;
-}
-.instruction-step {
-  flex: 1;
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-}
-.step-num {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 300;
-  font-style: italic;
-  background: var(--grad-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-  flex-shrink: 0;
-  padding-top: 1px;
-}
-.step-text {
-  font-size: 12px;
-  color: var(--ink-mid);
-  font-weight: 300;
-  line-height: 1.5;
-}
-.step-text strong {
-  display: block;
-  font-weight: 500;
-  color: var(--ink);
-  margin-bottom: 2px;
-  font-size: 12px;
-}
 
 /* ── SECTION ────────────────────────────────────────────────────── */
 .section { margin-bottom: 40px; }
@@ -507,6 +469,63 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
   letter-spacing: 0.3px;
 }
 
+/* ── REMOVE BUTTON ──────────────────────────────────────────────── */
+.btn-remove {
+  border: none;
+  background: none;
+  color: var(--rule);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: color .15s;
+  flex-shrink: 0;
+}
+.btn-remove:hover { color: #e8619a; }
+
+/* ── MOBILE ─────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .page-wrap { padding: 0 16px 60px; }
+
+  .progress-section { margin: 0 -16px 32px; padding-left: 16px; padding-right: 16px; gap: 10px; }
+  .btn-print { font-size: 10px; padding: 5px 10px; }
+
+  .cover { grid-template-columns: 1fr; padding: 36px 0 28px; gap: 16px; }
+  .cover-right { align-items: flex-start; }
+  .total-numbers { justify-content: flex-start; }
+  .total-labels { justify-content: flex-start; }
+  .cover-title { font-size: 28px; }
+
+  .info-block { grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px 16px; }
+  .info-block .info-field:last-child { grid-column: 1 / -1; }
+
+  .shot-table thead { display: none; }
+  .shot-table tbody tr {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 4px 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .shot-table tbody tr td { border-bottom: none; padding: 0; font-size: 13px; }
+  .shot-table td:first-child { grid-row: 1 / 3; }
+  .shot-table td:nth-child(2) { grid-column: 2; grid-row: 1; font-weight: 500; }
+  .shot-table td:nth-child(3) { grid-column: 2; grid-row: 2; }
+  .shot-table td:nth-child(3) .note-input { font-size: 11px; }
+  .shot-table td.status-cell { grid-column: 3; grid-row: 1; }
+  .shot-table td.remove-cell { grid-column: 3; grid-row: 2; text-align: center; }
+
+  .add-row td { padding: 10px 0 8px; }
+  .add-row-inner { flex-wrap: wrap; gap: 8px; }
+  .add-name-input { flex: 1 1 100%; }
+  .add-note-input-inline { flex: 1 1 100%; }
+  .btn-add { width: 100%; padding: 9px; text-align: center; }
+
+  .footer { flex-direction: column; gap: 6px; text-align: center; }
+}
+
 /* ── PRINT ──────────────────────────────────────────────────────── */
 @media print {
   @page { margin: 16mm 18mm; size: letter; }
@@ -515,6 +534,8 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
 
   .progress-section { display: none !important; }
   .add-row { display: none !important; }
+  .remove-cell { display: none !important; }
+  .btn-remove { display: none !important; }
   .btn-add { display: none !important; }
   .btn-print { display: none !important; }
 
@@ -621,35 +642,19 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
     </div>
   </div>
 
-  <!-- INSTRUCTIONS -->
-  <div class="instructions">
-    <div class="instruction-step">
-      <span class="step-num">01</span>
-      <div class="step-text"><strong>Before the shoot</strong>Review and customize the list. Add custom items in blank rows at the bottom of each section. Edit any shot direction notes to match your brand.</div>
-    </div>
-    <div class="instruction-step">
-      <span class="step-num">02</span>
-      <div class="step-text"><strong>On site</strong>Check each item as it's photographed. Use the status dropdown to mark items as Done, Skip, or leave pending for follow-up.</div>
-    </div>
-    <div class="instruction-step">
-      <span class="step-num">03</span>
-      <div class="step-text"><strong>On delivery</strong>Save or print as PDF from the browser — File → Print → Save as PDF. Share with client as delivery confirmation.</div>
-    </div>
-  </div>
-
   <!-- SECTIONS injected by JS -->
   <div id="sectionsContainer"></div>
 
   <!-- FOOTER -->
   <div class="footer">
     <div class="footer-brand">Solo on White</div>
-    <div class="footer-contact">soloonwhite.com &nbsp;·&nbsp; info@lukeleffel.com &nbsp;·&nbsp; @lukeleffel</div>
+    <div class="footer-contact">soloonwhite.com &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="553c3b333a1539203e303930333330397b363a38">[email&#160;protected]</a> &nbsp;·&nbsp; @lukeleffel</div>
   </div>
 
 </div><!-- /page-wrap -->
 
 <script>
-// ── DATA ────────────────────────────────────────────────────────────
+// ── DATA ─────────────────────────────────────────────────────────────
 const SECTIONS = [
   { title: "Espresso & Milk Drinks", items: [
     { name: "Espresso",   note: "demitasse, overhead or 3/4 angle" },
@@ -684,7 +689,7 @@ const SECTIONS = [
     { name: "Batch Brew / Drip", note: "3/4, branded cup" },
     { name: "Pour Over",         note: "3/4 or action — V60 or Kalita in frame" },
     { name: "Decaf Pour Over",   note: "3/4, confirm vessel" },
-    { name: "Café au Lait",      note: "3/4, branded cup" },
+    { name: "Cafe au Lait",      note: "3/4, branded cup" },
   ]},
   { title: "Food & Pastry", items: [
     { name: "Pastry / Baked Good #1", note: "overhead, white bg — confirm item" },
@@ -693,19 +698,19 @@ const SECTIONS = [
     { name: "Savory Item #2",         note: "overhead — confirm item" },
   ]},
   { title: "Retail / E-Commerce — Coffee", items: [
-    { name: "Coffee Bag — Current Offering",    note: "3/4 hero + overhead label detail" },
-    { name: "Coffee Bag — Espresso Blend",      note: "3/4 hero" },
-    { name: "Coffee Bag — Decaf",               note: "3/4 hero" },
-    { name: "Tea Pouch / Loose Leaf",           note: "3/4 hero, loose leaf visible if possible" },
-    { name: "Whole Bean Retail Bag",            note: "3/4 hero" },
+    { name: "Coffee Bag — Current Offering", note: "3/4 hero + overhead label detail" },
+    { name: "Coffee Bag — Espresso Blend",   note: "3/4 hero" },
+    { name: "Coffee Bag — Decaf",            note: "3/4 hero" },
+    { name: "Tea Pouch / Loose Leaf",        note: "3/4 hero, loose leaf visible if possible" },
+    { name: "Whole Bean Retail Bag",         note: "3/4 hero" },
   ]},
   { title: "Equipment", items: [
-    { name: "Scale",                    note: "3/4 hero + flat top-down" },
-    { name: "Dripper (V60 / Kalita)",   note: "3/4 hero" },
-    { name: "French Press / AeroPress", note: "3/4 hero" },
-    { name: "Insulated Server / Carafe",note: "3/4 hero" },
-    { name: "Cold Brew Kit",            note: "3/4 hero, show all components" },
-    { name: "Filters",                  note: "overhead flat lay" },
+    { name: "Scale",                         note: "3/4 hero + flat top-down" },
+    { name: "Dripper (V60 / Kalita)",        note: "3/4 hero" },
+    { name: "French Press / AeroPress",      note: "3/4 hero" },
+    { name: "Insulated Server / Carafe",     note: "3/4 hero" },
+    { name: "Cold Brew Kit",                 note: "3/4 hero, show all components" },
+    { name: "Filters",                       note: "overhead flat lay" },
     { name: "Water Treatment (e.g. Third Wave)", note: "3/4 or overhead" },
   ]},
   { title: "Merchandise & Apparel", items: [
@@ -716,102 +721,41 @@ const SECTIONS = [
   ]},
 ];
 
-// ── RENDER ──────────────────────────────────────────────────────────
-const container = document.getElementById('sectionsContainer');
-let totalCheckboxes = 0;
-
-SECTIONS.forEach((sec, si) => {
-  const section = document.createElement('div');
-  section.className = 'section';
-  section.innerHTML = `
-    <div class="section-header">
-      <h2 class="section-title">${sec.title}</h2>
-      <span class="section-count" id="count-${si}">${sec.items.length} items</span>
-    </div>
-    <div class="section-rule"></div>
-    <table class="shot-table">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Item</th>
-          <th>Shot Direction / Notes</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="tbody-${si}"></tbody>
-    </table>
-  `;
-  container.appendChild(section);
-
-  const tbody = document.getElementById(`tbody-${si}`);
-  totalCheckboxes += sec.items.length;
-
-  sec.items.forEach((item, ii) => {
-    tbody.appendChild(makeRow(item.name, item.note, si, ii));
-  });
-
-  // Add custom row
-  const addTr = document.createElement('tr');
-  addTr.className = 'add-row';
-  addTr.innerHTML = `
-    <td></td>
-    <td colspan="3">
-      <div class="add-row-inner">
-        <input class="add-name-input" type="text" placeholder="+ Add item" id="addname-${si}">
-        <input class="add-note-input-inline" type="text" placeholder="Shot direction / notes" id="addnote-${si}">
-        <button class="btn-add" onclick="addItem(${si})">Add</button>
-      </div>
-    </td>
-  `;
-  tbody.appendChild(addTr);
-});
-
+// ── HELPERS ───────────────────────────────────────────────────────────
 function makeRow(name, note, si, ii) {
   const tr = document.createElement('tr');
-  const cbId = `cb-${si}-${ii}`;
-  tr.innerHTML = `
-    <td>
-      <label class="cb-wrap">
-        <input type="checkbox" id="${cbId}" onchange="onCheck(this, '${si}')">
-        <span class="cb-box"></span>
-      </label>
-    </td>
-    <td class="item-name">${name}</td>
-    <td><input class="note-input" type="text" value="${note}" placeholder="Shot direction..."></td>
-    <td class="status-cell">
-      <select class="status-select" onchange="onStatus(this)">
-        <option value="">Pending</option>
-        <option value="done">Done ✓</option>
-        <option value="skip">Skip</option>
-      </select>
-    </td>
-  `;
+  const cbId = 'cb-' + si + '-' + ii;
+  tr.innerHTML =
+    '<td>' +
+      '<label class="cb-wrap">' +
+        '<input type="checkbox" id="' + cbId + '" onchange="onCheck(this,' + si + ')">' +
+        '<span class="cb-box"></span>' +
+      '</label>' +
+    '</td>' +
+    '<td class="item-name">' + name + '</td>' +
+    '<td><input class="note-input" type="text" value="' + note.replace(/"/g,'&quot;') + '" placeholder="Shot direction..."></td>' +
+    '<td class="status-cell">' +
+      '<select class="status-select" onchange="onStatus(this)">' +
+        '<option value="">Pending</option>' +
+        '<option value="done">Done \u2713</option>' +
+        '<option value="skip">Skip</option>' +
+      '</select>' +
+    '</td>' +
+    '<td class="remove-cell">' +
+      '<button class="btn-remove" onclick="removeRow(this)" title="Remove">\u00d7</button>' +
+    '</td>';
   return tr;
 }
 
-let customCount = {};
-function addItem(si) {
-  const nameEl = document.getElementById(`addname-${si}`);
-  const noteEl = document.getElementById(`addnote-${si}`);
-  const name = nameEl.value.trim();
-  if (!name) { nameEl.focus(); return; }
-  const note = noteEl.value.trim();
-  customCount[si] = (customCount[si] || 0) + 1;
-  const ii = `custom-${customCount[si]}`;
-  const tbody = document.getElementById(`tbody-${si}`);
-  const addRow = tbody.querySelector('.add-row');
-  const newRow = makeRow(name, note, si, ii);
-  tbody.insertBefore(newRow, addRow);
-  nameEl.value = '';
-  noteEl.value = '';
-  totalCheckboxes++;
+function removeRow(btn) {
+  btn.closest('tr').remove();
   updateProgress();
 }
 
 function onCheck(cb, si) {
-  const tr = cb.closest('tr');
+  var tr = cb.closest('tr');
   tr.classList.toggle('checked-row', cb.checked);
-  const sel = tr.querySelector('.status-select');
+  var sel = tr.querySelector('.status-select');
   if (cb.checked && sel.value === '') {
     sel.value = 'done';
     sel.className = 'status-select done';
@@ -824,35 +768,81 @@ function onCheck(cb, si) {
 
 function onStatus(sel) {
   sel.className = 'status-select' + (sel.value === 'done' ? ' done' : sel.value === 'skip' ? ' skip' : '');
-  const cb = sel.closest('tr').querySelector('input[type="checkbox"]');
+  var cb = sel.closest('tr').querySelector('input[type="checkbox"]');
   if (sel.value === 'done' && !cb.checked) { cb.checked = true; cb.closest('tr').classList.add('checked-row'); }
-  if (sel.value !== 'done' && cb.checked) { cb.checked = false; cb.closest('tr').classList.remove('checked-row'); }
+  if (sel.value !== 'done' && cb.checked)  { cb.checked = false; cb.closest('tr').classList.remove('checked-row'); }
   updateProgress();
 }
 
 function updateProgress() {
-  const all = document.querySelectorAll('.shot-table input[type="checkbox"]');
-  const done = [...all].filter(c => c.checked).length;
-  const total = all.length;
-
-  // sticky bar
-  document.getElementById('doneCount').textContent = done;
+  var all  = document.querySelectorAll('.shot-table input[type="checkbox"]');
+  var done = [].filter.call(all, function(c){ return c.checked; }).length;
+  var total = all.length;
+  document.getElementById('doneCount').textContent  = done;
   document.getElementById('totalCount').textContent = total;
-  document.getElementById('progressFill').style.width = total ? `${(done / total) * 100}%` : '0%';
-
-  // cover counter — target is always total listed items
-  document.getElementById('coverDone').textContent = done;
+  document.getElementById('progressFill').style.width = total ? (done / total * 100) + '%' : '0%';
+  document.getElementById('coverDone').textContent   = done;
   document.getElementById('coverTarget').textContent = total;
 }
 
-// Set today's date
-document.getElementById('todayDate') && (document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }));
+var customCount = {};
+function addItem(si) {
+  var nameEl = document.getElementById('addname-' + si);
+  var noteEl = document.getElementById('addnote-' + si);
+  var name = nameEl.value.trim();
+  if (!name) { nameEl.focus(); return; }
+  var note = noteEl.value.trim();
+  customCount[si] = (customCount[si] || 0) + 1;
+  var ii = 'custom-' + customCount[si];
+  var tbody = document.getElementById('tbody-' + si);
+  var addRow = tbody.querySelector('.add-row');
+  tbody.insertBefore(makeRow(name, note, si, ii), addRow);
+  nameEl.value = '';
+  noteEl.value = '';
+  updateProgress();
+}
 
-// Target input
-const targetInput = document.getElementById('targetInput');
-targetInput.addEventListener('input', updateProgress);
+// ── RENDER ────────────────────────────────────────────────────────────
+var container = document.getElementById('sectionsContainer');
 
-updateProgress();
+SECTIONS.forEach(function(sec, si) {
+  var section = document.createElement('div');
+  section.className = 'section';
+  section.innerHTML =
+    '<div class="section-header">' +
+      '<h2 class="section-title">' + sec.title + '</h2>' +
+      '<span class="section-count" id="count-' + si + '">' + sec.items.length + ' items</span>' +
+    '</div>' +
+    '<div class="section-rule"></div>' +
+    '<table class="shot-table">' +
+      '<thead><tr>' +
+        '<th></th><th>Item</th><th>Shot Direction / Notes</th><th>Status</th><th></th>' +
+      '</tr></thead>' +
+      '<tbody id="tbody-' + si + '"></tbody>' +
+    '</table>';
+  container.appendChild(section);
+
+  var tbody = document.getElementById('tbody-' + si);
+
+  sec.items.forEach(function(item, ii) {
+    tbody.appendChild(makeRow(item.name, item.note, si, ii));
+  });
+
+  var addTr = document.createElement('tr');
+  addTr.className = 'add-row';
+  addTr.innerHTML =
+    '<td></td>' +
+    '<td colspan="4">' +
+      '<div class="add-row-inner">' +
+        '<input class="add-name-input" type="text" placeholder="+ Add item" id="addname-' + si + '">' +
+        '<input class="add-note-input-inline" type="text" placeholder="Shot direction / notes" id="addnote-' + si + '">' +
+        '<button class="btn-add" onclick="addItem(' + si + ')">Add</button>' +
+      '</div>' +
+    '</td>';
+  tbody.appendChild(addTr);
+});
+
+requestAnimationFrame(updateProgress);
 </script>
 </body>
 </html>
