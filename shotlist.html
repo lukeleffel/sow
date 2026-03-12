@@ -621,7 +621,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
 .btn-copy:hover { opacity: .85; }
 .share-note { font-size: 11px; color: var(--ink-low); line-height: 1.5; }
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </head>
 <body>
 
@@ -666,11 +666,11 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
   <div class="info-block">
     <div class="info-field">
       <div class="info-label">Client / Business</div>
-      <input class="info-input" type="text" placeholder="One Line Coffee">
+      <input class="info-input" type="text" placeholder="Client / Business Name">
     </div>
     <div class="info-field">
       <div class="info-label">Location</div>
-      <input class="info-input" type="text" placeholder="Short North, Columbus OH">
+      <input class="info-input" type="text" placeholder="City, State">
     </div>
     <div class="info-field">
       <div class="info-label">Photographer</div>
@@ -686,7 +686,7 @@ body { font-family: var(--sans); background: var(--white); color: var(--ink); li
     </div>
     <div class="info-field">
       <div class="info-label">Notes</div>
-      <input class="info-input" type="text" placeholder="On-site, Short North">
+      <input class="info-input" type="text" placeholder="On-site, location notes">
     </div>
   </div>
 
@@ -1016,49 +1016,67 @@ restoreState();
 requestAnimationFrame(updateProgress);
 
 // ── SHARE / QR ────────────────────────────────────────────────────────
+var BASE_URL = 'https://soloonwhite.com/shotlist.html';
+
 function buildShareUrl() {
-  var state = { fields: {}, checks: {}, statuses: {}, notes: {}, customItems: [] };
+  // Only store non-default values to keep URL short
+  var state = {};
 
+  // Fields — only if filled
+  var fields = {};
   document.querySelectorAll('.info-input').forEach(function(el, i) {
-    state.fields[i] = el.value;
+    if (el.value.trim()) fields[i] = el.value.trim();
   });
+  if (Object.keys(fields).length) state.f = fields;
 
+  // Original item names for delta detection
   var originalNames = [];
   SECTIONS.forEach(function(s) { s.items.forEach(function(i) { originalNames.push(i.name); }); });
+
+  var checks = {}, statuses = {}, notes = {}, customs = [];
 
   document.querySelectorAll('.shot-table tbody tr:not(.add-row)').forEach(function(tr) {
     var cb     = tr.querySelector('input[type="checkbox"]');
     var sel    = tr.querySelector('.status-select');
     var note   = tr.querySelector('.note-input');
     var nameEl = tr.querySelector('.item-name');
-    if (!cb || !nameEl) return;
+    if (!nameEl) return;
     var key = nameEl.textContent.trim();
-    state.checks[key]   = cb.checked;
-    state.statuses[key] = sel  ? sel.value  : '';
-    state.notes[key]    = note ? note.value : '';
-    if (originalNames.indexOf(key) === -1) {
+    var isCustom = originalNames.indexOf(key) === -1;
+
+    if (isCustom) {
       var tbody = tr.closest('tbody');
       var si = tbody ? tbody.id.replace('tbody-', '') : '0';
-      state.customItems.push({ name: key, note: note ? note.value : '', si: si });
+      customs.push({ n: key, d: note ? note.value : '', s: si });
+    } else {
+      // Only store checked items
+      if (cb && cb.checked) checks[key] = 1;
+      // Only store non-pending statuses
+      if (sel && sel.value) statuses[key] = sel.value;
+      // Only store edited notes (compare to original)
+      var origNote = '';
+      SECTIONS.forEach(function(sec) {
+        sec.items.forEach(function(item) { if (item.name === key) origNote = item.note; });
+      });
+      if (note && note.value !== origNote) notes[key] = note.value;
     }
   });
 
-  var encoded = btoa(encodeURIComponent(JSON.stringify(state)));
-  return location.href.split('?')[0].split('#')[0] + '?state=' + encoded;
+  if (Object.keys(checks).length)   state.c = checks;
+  if (Object.keys(statuses).length) state.s = statuses;
+  if (Object.keys(notes).length)    state.n = notes;
+  if (customs.length)               state.x = customs;
+
+  var encoded = btoa(JSON.stringify(state));
+  return BASE_URL + '?v=' + encoded;
 }
 
 function openShareModal() {
   var url = buildShareUrl();
   document.getElementById('shareUrlDisplay').textContent = url;
   var container = document.getElementById('qr-container');
-  container.innerHTML = '';
-  try {
-    new QRCode(container, {
-      text: url, width: 180, height: 180,
-      colorDark: '#0f0f0f', colorLight: '#ffffff',
-      correctLevel: QRCode.CorrectLevel.M
-    });
-  } catch(e) { container.textContent = 'QR unavailable — copy link above'; }
+  var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&color=0f0f0f&bgcolor=ffffff&data=' + encodeURIComponent(url);
+  container.innerHTML = '<img src="' + qrUrl + '" width="180" height="180" style="border-radius:6px; display:block;" alt="QR Code">';
   document.getElementById('shareModal').classList.add('open');
 }
 
@@ -1077,45 +1095,51 @@ function copyShareUrl() {
   });
 }
 
-// Restore from URL ?state= param if present
+// Restore from URL ?v= param if present
 (function() {
   var params = new URLSearchParams(location.search);
-  var encoded = params.get('state');
+  var encoded = params.get('v');
   if (!encoded) return;
   try {
-    var state = JSON.parse(decodeURIComponent(atob(encoded)));
-    if (state.customItems && state.customItems.length) {
-      state.customItems.forEach(function(ci) {
-        var si = parseInt(ci.si, 10);
+    var state = JSON.parse(atob(encoded));
+
+    // Restore custom items first
+    if (state.x && state.x.length) {
+      state.x.forEach(function(ci) {
+        var si = parseInt(ci.s, 10);
         customCount[si] = (customCount[si] || 0) + 1;
         var ii = 'custom-' + customCount[si];
         var tbody = document.getElementById('tbody-' + si);
         if (!tbody) return;
         var addRow = tbody.querySelector('.add-row');
-        tbody.insertBefore(makeRow(ci.name, ci.note, si, ii), addRow);
+        tbody.insertBefore(makeRow(ci.n, ci.d, si, ii), addRow);
       });
     }
-    if (state.fields) {
+
+    // Restore info fields
+    if (state.f) {
       document.querySelectorAll('.info-input').forEach(function(el, i) {
-        if (state.fields[i] !== undefined) el.value = state.fields[i];
+        if (state.f[i] !== undefined) el.value = state.f[i];
       });
     }
+
+    // Restore checks, statuses, notes
     document.querySelectorAll('.shot-table tbody tr:not(.add-row)').forEach(function(tr) {
       var cb     = tr.querySelector('input[type="checkbox"]');
       var sel    = tr.querySelector('.status-select');
       var note   = tr.querySelector('.note-input');
       var nameEl = tr.querySelector('.item-name');
-      if (!cb || !nameEl) return;
+      if (!nameEl) return;
       var key = nameEl.textContent.trim();
-      if (state.checks && state.checks[key])   { cb.checked = true; tr.classList.add('checked-row'); }
-      if (state.statuses && state.statuses[key] && sel) {
-        sel.value = state.statuses[key];
+      if (state.c && state.c[key] && cb) { cb.checked = true; tr.classList.add('checked-row'); }
+      if (state.s && state.s[key] && sel) {
+        sel.value = state.s[key];
         sel.className = 'status-select' + (sel.value === 'done' ? ' done' : sel.value === 'skip' ? ' skip' : '');
       }
-      if (state.notes && state.notes[key] !== undefined && note) { note.value = state.notes[key]; }
+      if (state.n && state.n[key] !== undefined && note) { note.value = state.n[key]; }
     });
     updateProgress();
-  } catch(e) {}
+  } catch(e) { console.warn('State restore failed:', e); }
 })();
 </script>
 </body>
