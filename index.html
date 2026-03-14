@@ -509,6 +509,104 @@ footer { border-top: 1px solid var(--border); padding: 36px 60px; display: flex;
   </div>
 </section>
 
+  <!-- TESTIMONIAL CAROUSEL -->
+<section style="padding: 32px 60px 64px;">
+  <div style="max-width: 680px; margin: 0 auto; position: relative;">
+
+    <div id="testi-track" style="position: relative;">
+
+      <!-- Slide 0: Mariah B. -->
+      <div class="testi-slide testi-card" id="tslide0"
+           style="opacity:1; transform:translateX(0); transition:opacity 0.55s ease, transform 0.55s ease; position:relative; pointer-events:auto;">
+        <div class="testi-quote">&ldquo;WOW! My jaw dropped as soon as I opened the link. I am beyond happy with how everything turned out and so excited to put these to use. They&rsquo;re absolutely beautiful and will bring so much value to my brand.&rdquo;</div>
+        <div class="testi-attr" style="align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="testi-dot" style="flex-shrink:0;"></div>
+            <div style="text-align:left;">
+              <div class="testi-name">Mariah B.</div>
+              <div class="testi-role">All But One Dinner</div>
+            </div>
+          </div>
+          <div style="font-size:0.82rem; color:#f5b342; letter-spacing:2px; flex-shrink:0;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        </div>
+      </div>
+
+      <!-- Slide 1: Alyssa Litzinger, Coffee + Cone -->
+      <div class="testi-slide testi-card" id="tslide1"
+           style="opacity:0; transform:translateX(28px); transition:opacity 0.55s ease, transform 0.55s ease; position:absolute; top:0; left:0; right:0; pointer-events:none;">
+        <div class="testi-quote">&ldquo;We had such a great experience working with Luke. The photos turned out amazing and captured the shop perfectly!&rdquo;</div>
+        <div class="testi-attr" style="align-items:flex-start; justify-content:space-between;">
+          <div style="display:flex; align-items:center; gap:14px;">
+            <div class="testi-dot" style="flex-shrink:0;"></div>
+            <div style="text-align:left;">
+              <div class="testi-name">Alyssa Litzinger</div>
+              <div class="testi-role">Coffee + Cone &middot; Online Ordering &amp; Menu</div>
+            </div>
+          </div>
+          <div style="font-size:0.82rem; color:#f5b342; letter-spacing:2px; flex-shrink:0;">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Dot nav -->
+    <div style="display:flex; justify-content:center; gap:9px; margin-top:22px;">
+      <button onclick="testiGo(0)" id="tdot0"
+        style="width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;padding:0;
+               background:linear-gradient(135deg,#6B9FE8,#E85D9F);
+               transform:scale(1.3);transition:background 0.3s,transform 0.3s;" aria-label="Testimonial 1"></button>
+      <button onclick="testiGo(1)" id="tdot1"
+        style="width:8px;height:8px;border-radius:50%;border:none;cursor:pointer;padding:0;
+               background:#ddd;transform:scale(1);
+               transition:background 0.3s,transform 0.3s;" aria-label="Testimonial 2"></button>
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function () {
+  var cur = 0;
+  var total = 2;
+  var timer;
+
+  window.testiGo = function (idx) {
+    var prev = cur;
+    cur = ((idx % total) + total) % total;
+
+    var prevEl = document.getElementById('tslide' + prev);
+    prevEl.style.opacity = '0';
+    prevEl.style.transform = 'translateX(-28px)';
+    prevEl.style.position = 'absolute';
+    prevEl.style.pointerEvents = 'none';
+
+    var curEl = document.getElementById('tslide' + cur);
+    curEl.style.transition = 'none';
+    curEl.style.transform = 'translateX(28px)';
+    curEl.style.opacity = '0';
+    curEl.style.position = 'relative';
+    curEl.style.pointerEvents = 'auto';
+    curEl.getBoundingClientRect();
+    curEl.style.transition = 'opacity 0.55s ease, transform 0.55s ease';
+    curEl.style.opacity = '1';
+    curEl.style.transform = 'translateX(0)';
+
+    for (var i = 0; i < total; i++) {
+      var dot = document.getElementById('tdot' + i);
+      if (!dot) continue;
+      dot.style.background = i === cur
+        ? 'linear-gradient(135deg,#6B9FE8,#E85D9F)'
+        : '#ddd';
+      dot.style.transform = i === cur ? 'scale(1.3)' : 'scale(1)';
+    }
+
+    clearInterval(timer);
+    timer = setInterval(function () { testiGo(cur + 1); }, 5000);
+  };
+
+  timer = setInterval(function () { testiGo(cur + 1); }, 5000);
+})();
+</script>
 <!-- CTA MID -->
 <div class="cta-mid">
   <h2 class="cta-mid-title">Your guests are ready to order.<br><em>Give them something to say yes to.</em></h2>
